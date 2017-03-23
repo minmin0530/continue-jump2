@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>get started with three.js</title>
+</head>
+<body>
+ 
+<script src="three.min.js"></script>
+<script>
+
+var CUBE_NUM_X = 9;
+var CUBE_NUM_Y = 9;
+var CUBE_NUM_Z = 9;
+var CUBE_SIZE  = 10;
+    
+var GRAVITY         = 0.05;
+var JUMP_SPEED      = 1.53;
+var    X_SPEED      = 0.5;    
+var    Z_SPEED      = 0.5;    
+var jump_speed      = 0;
+var    x_speed      = 0;
+var    z_speed      = 0;
+
+var player_pos;
+var lookAt;
+var camera_angle = -90;
+    
+var keyArray            = new Array(8);
+var keyArrayUp          = new Array(8);
+
+var key_repeat_x_plus   = false;
+var key_repeat_x_minus  = false;
+var key_repeat_z_plus   = false;
+var key_repeat_z_minus  = false;
+
+var keyStatus = {}
+var doubleKeyUpLeft = false;
+var doubleKeyUpRight = false;
+document.addEventListener("keydown", function(e) {
+    switch(e.keyCode) {
+    case 37: keyArray[0] = true; break;
+    case 38: keyArray[1] = true; break;
+    case 39: keyArray[2] = true; break;
+    case 40: keyArray[3] = true; break;
+    case 88: keyArray[4] = true; break;//x
+    case 90: keyArray[5] = true; break;//z
+    case 83: keyArray[6] = true; break;//s
+    case 65: keyArray[7] = true; break;//a
+    }
+    keyStatus[e.keyCode] = true;
+    if (keyStatus[37] && keyStatus[38]) {
+        doubleKeyUpLeft = true;
+    } else {
+        doubleKeyUpLeft = false;
+    }
+
+    if (keyStatus[39] && keyStatus[38]) {
+        doubleKeyUpRight = true;
+    } else {
+        doubleKeyUpRight = false;
+    }
+}, false);
+
+document.addEventListener("keyup", function(e) {
+    switch(e.keyCode) {
+    case 37: keyArrayUp[0] = true; break;
+    case 38: keyArrayUp[1] = true; break;   
+    case 39: keyArrayUp[2] = true; break;
+    case 40: keyArrayUp[3] = true; break;
+    case 88: keyArrayUP[4] = true; break;
+    case 90: keyArrayUP[5] = true; break;
+    case 83: keyArrayUP[6] = true; break;
+    case 65: keyArrayUP[7] = true; break;
+    }
+    keyStatus[e.keyCode] = false;
+
+}, false);    
+    
+var main = function () {
+  var scene = new THREE.Scene();
+ 
+  var width  = 1200;
+  var height = 800;
+  var fov    = 60;
+  var aspect = width / height;
+  var near   = 1;
+  var far    = 1000;
+  var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+  camera.position.set( 0, 0, 50 );
+ 
+  var renderer = new THREE.WebGLRenderer();
+  renderer.setSize( width, height );
+  renderer.setClearColorHex(0xffffff, 1.0);
+  document.body.appendChild( renderer.domElement );
+ 
+  var directionalLight = new THREE.DirectionalLight( 0xff0000 );
+  directionalLight.position.set( 0, 0.7, 0.7 );
+  scene.add( directionalLight );
+
+  player_pos = new THREE.Vector3(0, CUBE_SIZE / 2, 130);
+  lookAt     = new THREE.Vector3(0, CUBE_SIZE / 2, -75);
+
+
+  var material3r = new THREE.LineBasicMaterial({color:0xff0000,linewidth:5}) ;
+  var material3g = new THREE.LineBasicMaterial({color:0x00ff00,linewidth:5}) ;
+  var material3b = new THREE.LineBasicMaterial({color:0x0000ff,linewidth:5}) ;
+
+  var CUBE_NUM = 1;
+  var Z_NUM = 1;
+  var geometry2           = new Array(CUBE_NUM * CUBE_NUM * Z_NUM);
+  var geometry22          = new Array(CUBE_NUM * CUBE_NUM * Z_NUM);
+  var lines               = new Array(CUBE_NUM * CUBE_NUM * Z_NUM);
+  var index = 0;
+  var material2;
+    
+  material2 = new THREE.LineBasicMaterial({color:0xff0000,linewidth:5}) ;
+  geometry2[index] = new THREE.Geometry();
+  geometry22[index] = new THREE.Geometry();
+  var LINE_SIZE = CUBE_SIZE / 2;
+  var HALF=0;
+  for (var z = 0; z < CUBE_NUM_Z; z++) {
+  for (var y = 0; y < CUBE_NUM_Y; y++) {
+  for (var x = 0; x < CUBE_NUM_X; x++) {
+      var r = Math.floor( Math.random() * 11 );
+
+          geometry2[index].vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+          geometry2[index].vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
+          geometry2[index].vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+          geometry2[index].vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
+          geometry2[index].vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+          geometry2[index].vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
+          geometry2[index].vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
+          geometry2[index].vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
+          geometry2[index].vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
+          geometry2[index].vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+          geometry2[index].vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+          geometry2[index].vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
+          geometry2[index].vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
+          geometry2[index].vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+          geometry2[index].vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+          geometry2[index].vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+          geometry2[index].vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
+          geometry2[index].vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+
+          for (var i = 0; i < 18; ++i) {
+            geometry22[index].vertices[i] = new THREE.Vector3(geometry2[index].vertices[i].x,geometry2[index].vertices[i].y,geometry2[index].vertices[i].z);
+          }
+
+          lines[index] = new THREE.Line(geometry22[index],material2);
+          lines[index].position.set( 0, 0, 0 );
+    
+
+    
+    lines[index].translateX(x * 12 - CUBE_NUM_X / 2 * 12);
+    lines[index].translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
+    lines[index].translateZ(z * 12 - CUBE_NUM_Z / 2 * 12);
+      
+      
+    var geometry = new THREE.CubeGeometry( CUBE_SIZE, CUBE_SIZE, CUBE_SIZE );
+    var material = new THREE.MeshPhongMaterial( { color: 0xffffff, transparent:true, blending:THREE.NormalBlending, opacity:0.1 } );
+    var mesh = new THREE.Mesh( geometry, material );
+    mesh.translateX(x * 12 - CUBE_NUM_X / 2 * 12);
+    mesh.translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
+    mesh.translateZ(z * 12 - CUBE_NUM_Z / 2 * 12);
+    if ((x % 2 == 0 && y % 2 == 0 && z % 2 == 0) || r > 5) {
+      scene.add(lines[index]);
+      scene.add(mesh);
+    }
+  }
+  }
+  }
+  ( function renderLoop () {
+    requestAnimationFrame( renderLoop );
+      
+    if (keyArray[0] || doubleKeyUpLeft) {
+        keyArray[0] = false;
+        camera_angle -= 0.01;
+        lookAt.x = Math.cos(camera_angle) * 75 * 2;
+        lookAt.z = Math.sin(camera_angle) * 75 * 2;
+    }//x_speed = -X_SPEED;}
+    if (keyArray[2] || doubleKeyUpRight) {
+        keyArray[2] = false;
+        camera_angle += 0.01;
+        lookAt.x = Math.cos(camera_angle) * 75 * 2;
+        lookAt.z = Math.sin(camera_angle) * 75 * 2;
+    }//x_speed =  X_SPEED;}
+    if (keyArray[1] || doubleKeyUpLeft) {
+//        keyArray[1] = false;
+        player_pos.x += lookAt.x * 0.0008;
+        player_pos.z += lookAt.z * 0.0008;
+    }
+    if (keyArray[3] ) {
+        keyArray[3] = false;
+        player_pos.x -= lookAt.x * 0.0008;
+        player_pos.z -= lookAt.z * 0.0008;
+    }
+
+    if (keyArrayUp[0]) {        keyArrayUp[0] = false;   x_speed = 0; doubleKeyUpLeft = false;}
+    if (keyArrayUp[2]) {        keyArrayUp[2] = false;   x_speed = 0; doubleKeyUpRight = false;}
+    if (keyArrayUp[1]) {
+        keyArrayUp[1] = false;
+        z_speed = 0;
+        doubleKeyUpLeft = false;
+        doubleKeyUpRight = false;
+        keyArray[1] = false;}
+    if (keyArrayUp[3]) {        keyArrayUp[3] = false;   z_speed = 0; }
+
+      
+/*
+    lines[0].rotation.set(
+      0,
+      lines[0].rotation.y + .01,
+      lines[0].rotation.z + .01
+    );
+      
+    mesh.rotation.set(
+      0,
+      mesh.rotation.y + .01,
+      mesh.rotation.z + .01
+    );
+*/
+    camera.position.set(player_pos.x,
+                        player_pos.y,
+                        player_pos.z);
+    camera.lookAt( {x:player_pos.x + lookAt.x,
+                    y:player_pos.y + lookAt.y,
+                    z:player_pos.z + lookAt.z } );
+
+    renderer.render( scene, camera );
+  } )();
+};
+ 
+window.addEventListener( 'DOMContentLoaded', main, false );
+</script>
+ 
+</body>
+</html>
