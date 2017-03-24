@@ -24,19 +24,14 @@ var    z_speed      = 0;
 
 var player_pos;
 var lookAt;
-var camera_angle = -90;
+var camera_angle = -89.55;
     
 var keyArray            = new Array(8);
 var keyArrayUp          = new Array(8);
-
-var key_repeat_x_plus   = false;
-var key_repeat_x_minus  = false;
-var key_repeat_z_plus   = false;
-var key_repeat_z_minus  = false;
-
 var keyStatus = {}
 var doubleKeyUpLeft = false;
 var doubleKeyUpRight = false;
+var keyDownPulse = false;
 document.addEventListener("keydown", function(e) {
     switch(e.keyCode) {
     case 37: keyArray[0] = true; break;
@@ -67,7 +62,7 @@ document.addEventListener("keyup", function(e) {
     case 37: keyArrayUp[0] = true; break;
     case 38: keyArrayUp[1] = true; break;   
     case 39: keyArrayUp[2] = true; break;
-    case 40: keyArrayUp[3] = true; break;
+    case 40: keyArrayUp[3] = true; keyDownPulse = false; break;
     case 88: keyArrayUP[4] = true; break;
     case 90: keyArrayUP[5] = true; break;
     case 83: keyArrayUP[6] = true; break;
@@ -98,8 +93,10 @@ var main = function () {
   directionalLight.position.set( 0, 0.7, 0.7 );
   scene.add( directionalLight );
 
-  player_pos = new THREE.Vector3(0, CUBE_SIZE / 2, 130);
-  lookAt     = new THREE.Vector3(0, CUBE_SIZE / 2, -75);
+  player_pos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, 130);
+  lookAt     = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -75);
+        lookAt.x = Math.cos(camera_angle) * 75 * 2;
+        lookAt.z = Math.sin(camera_angle) * 75 * 2;
 
 
   var material3r = new THREE.LineBasicMaterial({color:0xff0000,linewidth:5}) ;
@@ -186,12 +183,19 @@ var main = function () {
     if (keyArray[0] || doubleKeyUpLeft) {
         keyArray[0] = false;
         camera_angle -= 0.01;
+        if (!doubleKeyUpLeft) {
+          camera_angle -= 0.01;
+        }
         lookAt.x = Math.cos(camera_angle) * 75 * 2;
         lookAt.z = Math.sin(camera_angle) * 75 * 2;
     }//x_speed = -X_SPEED;}
     if (keyArray[2] || doubleKeyUpRight) {
         keyArray[2] = false;
         camera_angle += 0.01;
+        if (!doubleKeyUpRight) {
+          camera_angle += 0.01;
+        }
+
         lookAt.x = Math.cos(camera_angle) * 75 * 2;
         lookAt.z = Math.sin(camera_angle) * 75 * 2;
     }//x_speed =  X_SPEED;}
@@ -200,10 +204,13 @@ var main = function () {
         player_pos.x += lookAt.x * 0.0008;
         player_pos.z += lookAt.z * 0.0008;
     }
-    if (keyArray[3] ) {
+    if (keyArray[3] && keyDownPulse == false) {
         keyArray[3] = false;
-        player_pos.x -= lookAt.x * 0.0008;
-        player_pos.z -= lookAt.z * 0.0008;
+        keyDownPulse = true;
+        lookAt.x *= -1;
+        lookAt.z *= -1;
+//        player_pos.x -= lookAt.x * 0.0008;
+//        player_pos.z -= lookAt.z * 0.0008;
     }
     if (keyArray[4] ) {
         keyArray[4] = false;
