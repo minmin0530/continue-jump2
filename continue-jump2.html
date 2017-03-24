@@ -94,7 +94,7 @@ var main = function () {
   renderer.setClearColorHex(0xffffff, 1.0);
   document.body.appendChild( renderer.domElement );
  
-  var directionalLight = new THREE.DirectionalLight( 0xff0000 );
+  var directionalLight = new THREE.DirectionalLight( 0xffffff );
   directionalLight.position.set( 0, 0.7, 0.7 );
   scene.add( directionalLight );
 
@@ -114,15 +114,25 @@ var main = function () {
   var index = 0;
   var material2;
     
-  material2 = new THREE.LineBasicMaterial({color:0xff0000,linewidth:5}) ;
   geometry2[index] = new THREE.Geometry();
   geometry22[index] = new THREE.Geometry();
   var LINE_SIZE = CUBE_SIZE / 2;
   var HALF=0;
+
+    var material_color = new Array(CUBE_NUM_X);
+    for (var v = 0; v < CUBE_NUM_X; v++) {
+      material_color[v] = new Array(CUBE_NUM_Y);
+      for (var w = 0; w < CUBE_NUM_Y; w++) {
+        material_color[v][w] = new Array(CUBE_NUM_Z);
+      }
+    }
+
   for (var z = 0; z < CUBE_NUM_Z; z++) {
   for (var y = 0; y < CUBE_NUM_Y; y++) {
   for (var x = 0; x < CUBE_NUM_X; x++) {
-      var r = Math.floor( Math.random() * 11 );
+    var r = Math.floor( Math.random() * 11 );
+    material_color[z][y][x] = 256 * 256 * (255 - x * 28) + 256 * (255 - y * 28) + (255 - z * 28);
+    material2 = new THREE.LineBasicMaterial({color:material_color[z][y][x],linewidth:5}) ;
 
           geometry2[index].vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
           geometry2[index].vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
@@ -158,7 +168,7 @@ var main = function () {
       
       
     var geometry = new THREE.CubeGeometry( CUBE_SIZE, CUBE_SIZE, CUBE_SIZE );
-    var material = new THREE.MeshPhongMaterial( { color: 0xffffff, transparent:true, blending:THREE.NormalBlending, opacity:0.1 } );
+    var material = new THREE.MeshPhongMaterial( { color: material_color[z][y][x], transparent:true, blending:THREE.NormalBlending, opacity:0.1 } );
     var mesh = new THREE.Mesh( geometry, material );
     mesh.translateX(x * 12 - CUBE_NUM_X / 2 * 12);
     mesh.translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
@@ -195,7 +205,15 @@ var main = function () {
         player_pos.x -= lookAt.x * 0.0008;
         player_pos.z -= lookAt.z * 0.0008;
     }
-
+    if (keyArray[4] ) {
+        keyArray[4] = false;
+        player_pos.y -= 1;
+    }
+    if (keyArray[5] ) {
+        keyArray[5] = false;
+        player_pos.y += 1;
+    }
+      
     if (keyArrayUp[0]) {        keyArrayUp[0] = false;   x_speed = 0; doubleKeyUpLeft = false;}
     if (keyArrayUp[2]) {        keyArrayUp[2] = false;   x_speed = 0; doubleKeyUpRight = false;}
     if (keyArrayUp[1]) {
