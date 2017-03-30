@@ -8,11 +8,12 @@
  
 <script src="three.min.js"></script>
 <script>
-
+var RADIAN = 3.14159265358 / 180.0;
 var CUBE_NUM_X = 9;
 var CUBE_NUM_Y = 9;
 var CUBE_NUM_Z = 9;
 var CUBE_SIZE  = 10;
+var CAMERA_PLAYER_DISTANCE = CUBE_SIZE * 2;
     
 var GRAVITY         = 0.05;
 var JUMP_SPEED      = 1.53;
@@ -24,7 +25,8 @@ var    z_speed      = 0;
 
 var player_pos;
 var lookAt;
-var camera_angle = -89.55;
+var camera_angle = 90;
+var putCube = false;
     
 var keyArray            = new Array(8);
 var keyArrayUp          = new Array(8);
@@ -94,10 +96,9 @@ var main = function () {
   scene.add( directionalLight );
 
   player_pos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, 130);
-  lookAt     = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -75);
-        lookAt.x = Math.cos(camera_angle) * 75 * 2;
-        lookAt.z = Math.sin(camera_angle) * 75 * 2;
-
+  lookAt     = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -CAMERA_PLAYER_DISTANCE);
+  lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+  lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
 
   var material3r = new THREE.LineBasicMaterial({color:0xff0000,linewidth:5}) ;
   var material3g = new THREE.LineBasicMaterial({color:0x00ff00,linewidth:5}) ;
@@ -129,35 +130,33 @@ var main = function () {
   for (var x = 0; x < CUBE_NUM_X; x++) {
     var r = Math.floor( Math.random() * 11 );
     material_color[z][y][x] = 256 * 256 * (255 - x * 28) + 256 * (255 - y * 28) + (255 - z * 28);
-    material2 = new THREE.LineBasicMaterial({color:material_color[z][y][x],linewidth:5}) ;
+    material2 = new THREE.LineBasicMaterial({color:material_color[z][y][x],linewidth:1});
 
-          geometry2[index].vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
-          geometry2[index].vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
-          geometry2[index].vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
-          geometry2[index].vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
-          geometry2[index].vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
-          geometry2[index].vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
-          geometry2[index].vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
-          geometry2[index].vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
-          geometry2[index].vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
-          geometry2[index].vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
-          geometry2[index].vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
-          geometry2[index].vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
-          geometry2[index].vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
-          geometry2[index].vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
-          geometry2[index].vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
-          geometry2[index].vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
-          geometry2[index].vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
-          geometry2[index].vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+    geometry2[index].vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+    geometry2[index].vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
+    geometry2[index].vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
+    geometry2[index].vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
+    geometry2[index].vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
+    geometry2[index].vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+    geometry2[index].vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+    geometry2[index].vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
+    geometry2[index].vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+    geometry2[index].vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+    geometry2[index].vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+    geometry2[index].vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
+    geometry2[index].vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
 
-          for (var i = 0; i < 18; ++i) {
-            geometry22[index].vertices[i] = new THREE.Vector3(geometry2[index].vertices[i].x,geometry2[index].vertices[i].y,geometry2[index].vertices[i].z);
-          }
+    for (var i = 0; i < 18; ++i) {
+      geometry22[index].vertices[i] = new THREE.Vector3(geometry2[index].vertices[i].x,geometry2[index].vertices[i].y,geometry2[index].vertices[i].z);
+    }
 
-          lines[index] = new THREE.Line(geometry22[index],material2);
-          lines[index].position.set( 0, 0, 0 );
-    
-
+    lines[index] = new THREE.Line(geometry22[index],material2);
+    lines[index].position.set( 0, 0, 0 );
     
     lines[index].translateX(x * 12 - CUBE_NUM_X / 2 * 12);
     lines[index].translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
@@ -177,40 +176,119 @@ var main = function () {
   }
   }
   }
+  var playerMaterial = new THREE.LineBasicMaterial({color:0xff0000,linewidth:1});
+  var playerGeometryLarge  = new THREE.Geometry();
+  var playerGeometryMiddle = new THREE.Geometry();
+  var playerGeometrySmall  = new THREE.Geometry();
+  var playerGeometry  = new THREE.Geometry();
+
+  playerGeometryLarge.vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometryLarge.vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryLarge.vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryLarge.vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryLarge.vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometryLarge.vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryLarge.vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryLarge.vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryLarge.vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryLarge.vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryLarge.vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryLarge.vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryLarge.vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryLarge.vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryLarge.vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryLarge.vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryLarge.vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryLarge.vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+
+  LINE_SIZE *= 0.6;
+  HALF      *= 0.6;
+  
+  playerGeometryMiddle.vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometryMiddle.vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryMiddle.vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryMiddle.vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryMiddle.vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometryMiddle.vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryMiddle.vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryMiddle.vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryMiddle.vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometryMiddle.vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryMiddle.vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryMiddle.vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryMiddle.vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryMiddle.vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryMiddle.vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometryMiddle.vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometryMiddle.vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometryMiddle.vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+
+  LINE_SIZE *= 0.6;
+  HALF      *= 0.6;
+  
+  playerGeometrySmall.vertices[0] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometrySmall.vertices[1] = new THREE.Vector3(LINE_SIZE - HALF, -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometrySmall.vertices[2] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometrySmall.vertices[3] = new THREE.Vector3(-LINE_SIZE - HALF, LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometrySmall.vertices[4] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, -LINE_SIZE);
+  playerGeometrySmall.vertices[5] = new THREE.Vector3(-LINE_SIZE - HALF, -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometrySmall.vertices[6] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometrySmall.vertices[7] = new THREE.Vector3(LINE_SIZE - HALF,   LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometrySmall.vertices[8] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF, LINE_SIZE );
+  playerGeometrySmall.vertices[9] = new THREE.Vector3(-LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometrySmall.vertices[10] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometrySmall.vertices[11] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometrySmall.vertices[12] = new THREE.Vector3(LINE_SIZE - HALF,  -LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometrySmall.vertices[13] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometrySmall.vertices[14] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+  playerGeometrySmall.vertices[15] = new THREE.Vector3(LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE );
+  playerGeometrySmall.vertices[16] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  LINE_SIZE);
+  playerGeometrySmall.vertices[17] = new THREE.Vector3(-LINE_SIZE - HALF,  LINE_SIZE - HALF,  -LINE_SIZE);
+
+  var playerLinesLarge  = new THREE.Line(playerGeometryLarge,  playerMaterial);
+  var playerLinesMiddle = new THREE.Line(playerGeometryMiddle, playerMaterial);
+  var playerLinesSmall  = new THREE.Line(playerGeometrySmall,  playerMaterial);
+  playerLinesLarge .position.set( 0, 0, 0 );
+  playerLinesMiddle.position.set( 0, 0, 0 );
+  playerLinesSmall .position.set( 0, 0, 0 );
+  
+  scene.add(playerLinesLarge);
+  scene.add(playerLinesMiddle);
+  scene.add(playerLinesSmall);
+  
+    
   ( function renderLoop () {
     requestAnimationFrame( renderLoop );
       
     if (keyArray[0] || doubleKeyUpLeft) {
         keyArray[0] = false;
-        camera_angle -= 0.01;
+        camera_angle -= 1;
         if (!doubleKeyUpLeft) {
-          camera_angle -= 0.01;
+          camera_angle -= 1;
         }
-        lookAt.x = Math.cos(camera_angle) * 75 * 2;
-        lookAt.z = Math.sin(camera_angle) * 75 * 2;
-    }//x_speed = -X_SPEED;}
+        lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+        lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+    }
     if (keyArray[2] || doubleKeyUpRight) {
         keyArray[2] = false;
-        camera_angle += 0.01;
+        camera_angle += 1;
         if (!doubleKeyUpRight) {
-          camera_angle += 0.01;
+          camera_angle += 1;
         }
 
-        lookAt.x = Math.cos(camera_angle) * 75 * 2;
-        lookAt.z = Math.sin(camera_angle) * 75 * 2;
-    }//x_speed =  X_SPEED;}
+        lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+        lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+    }
     if (keyArray[1] || doubleKeyUpLeft) {
-//        keyArray[1] = false;
-        player_pos.x += lookAt.x * 0.0008;
-        player_pos.z += lookAt.z * 0.0008;
+        player_pos.x -= lookAt.x * 0.008;
+        player_pos.z -= lookAt.z * 0.008;
     }
     if (keyArray[3] && keyDownPulse == false) {
         keyArray[3] = false;
         keyDownPulse = true;
         lookAt.x *= -1;
         lookAt.z *= -1;
-//        player_pos.x -= lookAt.x * 0.0008;
-//        player_pos.z -= lookAt.z * 0.0008;
+        camera_angle += 180;
     }
     if (keyArray[4] ) {
         keyArray[4] = false;
@@ -219,6 +297,10 @@ var main = function () {
     if (keyArray[5] ) {
         keyArray[5] = false;
         player_pos.y += 1;
+    }
+    if (keyArray[6] ) {
+        keyArray[6] = false;
+        putCube = true;
     }
       
     if (keyArrayUp[0]) {        keyArrayUp[0] = false;   x_speed = 0; doubleKeyUpLeft = false;}
@@ -232,25 +314,24 @@ var main = function () {
     if (keyArrayUp[3]) {        keyArrayUp[3] = false;   z_speed = 0; }
 
       
-/*
-    lines[0].rotation.set(
-      0,
-      lines[0].rotation.y + .01,
-      lines[0].rotation.z + .01
-    );
-      
-    mesh.rotation.set(
-      0,
-      mesh.rotation.y + .01,
-      mesh.rotation.z + .01
-    );
-*/
-    camera.position.set(player_pos.x,
-                        player_pos.y,
-                        player_pos.z);
-    camera.lookAt( {x:player_pos.x + lookAt.x,
-                    y:player_pos.y + lookAt.y,
-                    z:player_pos.z + lookAt.z } );
+    camera.position.set(player_pos.x + lookAt.x,
+                        player_pos.y + lookAt.y + CUBE_SIZE / 2,
+                        player_pos.z + lookAt.z);
+    camera.lookAt( {x:player_pos.x ,
+                    y:player_pos.y ,
+                    z:player_pos.z } );
+
+    playerLinesLarge.position.set(player_pos.x + lookAt.x/8,
+                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
+                                  player_pos.z + lookAt.z/8);
+    playerLinesMiddle.position.set(player_pos.x + lookAt.x/8,
+                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
+                                  player_pos.z + lookAt.z/8);
+    if (!putCube) {
+      playerLinesSmall.position.set(player_pos.x + lookAt.x/8,
+                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
+                                  player_pos.z + lookAt.z/8);
+    }
 
     renderer.render( scene, camera );
   } )();
