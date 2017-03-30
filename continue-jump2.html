@@ -2,7 +2,53 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>get started with three.js</title>
+<title>continue-jump2</title>
+<style>
+.goButton {
+    position:absolute; top:800px; left:300px;
+    font: 20px bold 80%/150% sans-serif;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(255,255,255);
+    letter-spacing: 5px;
+    padding: 5px 15px;
+    border-radius: 25px;
+    margin-bottom: 0.5em;
+
+}
+.leftButton {
+    position:absolute; top:850px; left:200px;
+    font: 20px bold 80%/150% sans-serif;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(255,255,255);
+    letter-spacing: 5px;
+    padding: 5px 15px;
+    border-radius: 25px;
+    margin-bottom: 0.5em;
+
+}
+.rightButton {
+    position:absolute; top:850px; left:400px;
+    font: 20px bold 80%/150% sans-serif;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.8);
+    color: rgb(255,255,255);
+    letter-spacing: 5px;
+    padding: 5px 15px;
+    border-radius: 25px;
+    margin-bottom: 0.5em;
+
+}
+.overlayButton:hover {
+  background-color: #fff;
+  color: #7f8c8d;
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+}
+</style>
 </head>
 <body>
  
@@ -23,7 +69,7 @@ var jump_speed      = 0;
 var    x_speed      = 0;
 var    z_speed      = 0;
 
-var player_pos;
+var cameraPos;
 var lookAt;
 var camera_angle = 90;
 var putCube = false;
@@ -34,6 +80,14 @@ var keyStatus = {}
 var doubleKeyUpLeft = false;
 var doubleKeyUpRight = false;
 var keyDownPulse = false;
+    
+var goButton;
+var isGo = false;
+var rightButton;
+var isRight = false;
+var leftButton;
+var isLeft = false;
+
 document.addEventListener("keydown", function(e) {
     switch(e.keyCode) {
     case 37: keyArray[0] = true; break;
@@ -95,7 +149,7 @@ var main = function () {
   directionalLight.position.set( 0, 0.7, 0.7 );
   scene.add( directionalLight );
 
-  player_pos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, 130);
+  cameraPos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, 130);
   lookAt     = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -CAMERA_PLAYER_DISTANCE);
   lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
   lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
@@ -255,11 +309,59 @@ var main = function () {
   scene.add(playerLinesLarge);
   scene.add(playerLinesMiddle);
   scene.add(playerLinesSmall);
-  
+
+    goButton = document.createElement('div');
+    goButton.classList.add( 'goButton' );
+    goButton.innerHTML = "進む";
+    goButton.onclick = function() {
+        if (isGo) {
+            isGo = false;
+        } else {
+            isGo = true;
+        }
+    };
+    document.body.appendChild(goButton);
+
+    rightButton = document.createElement('div');
+    rightButton.classList.add( 'rightButton' );
+    rightButton.innerHTML = "右へ";
+    rightButton.onclick = function() {
+        if (isRight) {
+            isRight = false;
+        } else {
+            isRight = true;
+        }
+    };
+    document.body.appendChild(rightButton);
+
+    leftButton = document.createElement('div');
+    leftButton.classList.add( 'leftButton' );
+    leftButton.innerHTML = "左へ";
+    leftButton.onclick = function() {
+        if (isLeft) {
+            isLeft = false;
+        } else {
+            isLeft = true;
+        }
+    };
+    document.body.appendChild(leftButton);
     
   ( function renderLoop () {
     requestAnimationFrame( renderLoop );
-      
+    if (isGo) {
+      cameraPos.x -= lookAt.x * 0.008;
+      cameraPos.z -= lookAt.z * 0.008;
+    }
+    if (isRight) {
+        camera_angle += 0.2;
+        lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+        lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+    }
+    if (isLeft) {
+        camera_angle -= 0.2;
+        lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+        lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
+    }
     if (keyArray[0] || doubleKeyUpLeft) {
         keyArray[0] = false;
         camera_angle -= 1;
@@ -280,8 +382,8 @@ var main = function () {
         lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
     }
     if (keyArray[1] || doubleKeyUpLeft) {
-        player_pos.x -= lookAt.x * 0.008;
-        player_pos.z -= lookAt.z * 0.008;
+        cameraPos.x -= lookAt.x * 0.008;
+        cameraPos.z -= lookAt.z * 0.008;
     }
     if (keyArray[3] && keyDownPulse == false) {
         keyArray[3] = false;
@@ -292,11 +394,11 @@ var main = function () {
     }
     if (keyArray[4] ) {
         keyArray[4] = false;
-        player_pos.y -= 1;
+        cameraPos.y -= 1;
     }
     if (keyArray[5] ) {
         keyArray[5] = false;
-        player_pos.y += 1;
+        cameraPos.y += 1;
     }
     if (keyArray[6] ) {
         keyArray[6] = false;
@@ -314,23 +416,23 @@ var main = function () {
     if (keyArrayUp[3]) {        keyArrayUp[3] = false;   z_speed = 0; }
 
       
-    camera.position.set(player_pos.x + lookAt.x,
-                        player_pos.y + lookAt.y + CUBE_SIZE / 2,
-                        player_pos.z + lookAt.z);
-    camera.lookAt( {x:player_pos.x ,
-                    y:player_pos.y ,
-                    z:player_pos.z } );
+    camera.position.set(cameraPos.x + lookAt.x,
+                        cameraPos.y + lookAt.y + CUBE_SIZE / 2,
+                        cameraPos.z + lookAt.z);
+    camera.lookAt( {x:cameraPos.x ,
+                    y:cameraPos.y ,
+                    z:cameraPos.z } );
 
-    playerLinesLarge.position.set(player_pos.x + lookAt.x/8,
-                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
-                                  player_pos.z + lookAt.z/8);
-    playerLinesMiddle.position.set(player_pos.x + lookAt.x/8,
-                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
-                                  player_pos.z + lookAt.z/8);
+    playerLinesLarge.position.set(cameraPos.x + lookAt.x/8,
+                                  cameraPos.y + lookAt.y + CUBE_SIZE / 2,
+                                  cameraPos.z + lookAt.z/8);
+    playerLinesMiddle.position.set(cameraPos.x + lookAt.x/8,
+                                  cameraPos.y + lookAt.y + CUBE_SIZE / 2,
+                                  cameraPos.z + lookAt.z/8);
     if (!putCube) {
-      playerLinesSmall.position.set(player_pos.x + lookAt.x/8,
-                                  player_pos.y + lookAt.y + CUBE_SIZE / 2,
-                                  player_pos.z + lookAt.z/8);
+      playerLinesSmall.position.set(cameraPos.x + lookAt.x/8,
+                                  cameraPos.y + lookAt.y + CUBE_SIZE / 2,
+                                  cameraPos.z + lookAt.z/8);
     }
 
     renderer.render( scene, camera );
