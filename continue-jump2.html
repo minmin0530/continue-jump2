@@ -59,6 +59,7 @@ var CUBE_NUM_X = 9;
 var CUBE_NUM_Y = 9;
 var CUBE_NUM_Z = 9;
 var CUBE_SIZE  = 10;
+var PLAYER_SIZE = 10;
 var CAMERA_PLAYER_DISTANCE = CUBE_SIZE * 2;
     
 var GRAVITY         = 0.05;
@@ -69,6 +70,7 @@ var jump_speed      = 0;
 var    x_speed      = 0;
 var    z_speed      = 0;
 
+var mesh;
 var cameraPos;
 var lookAt;
 var camera_angle = 90;
@@ -82,10 +84,10 @@ var doubleKeyUpRight = false;
 var keyDownPulse = false;
     
 var goButton;
-var isGo = false;
 var rightButton;
-var isRight = false;
 var leftButton;
+var isGo = false;
+var isRight = false;
 var isLeft = false;
 
 document.addEventListener("keydown", function(e) {
@@ -127,6 +129,99 @@ document.addEventListener("keyup", function(e) {
     keyStatus[e.keyCode] = false;
 
 }, false);    
+
+function x_right(x,y,z) {
+for (var i = -1; i <2; ++i) {
+for (var j = -1; j <2; ++j) {
+//if (
+//cameraPos.x > mesh[z][y+i][x+j].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.x < mesh[z][y+i][x+j].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y < mesh[z][y+i][x+j].position.y + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y > mesh[z][y+i][x+j].position.y - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z > mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z < mesh[z][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2
+//) {
+	if (cameraPos.x < mesh[z+j][y+i][x].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+        cameraPos.x > mesh[z+j][y+i][x].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2) {
+		cameraPos.x = mesh[z+j][y+i][x].position.x  + (CUBE_SIZE + PLAYER_SIZE) / 2;
+	}// else {
+      cameraPos.x -= lookAt.x * 0.002;   
+    //}
+//}
+}
+}
+}
+
+function x_left(x,y,z) {
+for (var i = -1; i <2; ++i) {
+for (var j = -1; j <2; ++j) {
+//if (
+//cameraPos.x > mesh[z][y+i][x+j].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.x < mesh[z][y+i][x+j].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y < mesh[z][y+i][x+j].position.y + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y > mesh[z][y+i][x+j].position.y - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z > mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z < mesh[z][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2
+//) {
+	if (cameraPos.x < mesh[z+j][y+i][x].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+        cameraPos.x > mesh[z+j][y+i][x].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2) {
+		cameraPos.x = mesh[z+j][y+i][x].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2;
+	}// else {
+      cameraPos.x -= lookAt.x * 0.002;   
+    //}
+//}
+}
+}
+}
+
+    
+    
+function z_front(x,y,z) {
+for (var i = -1; i <2; ++i) {
+for (var j = -1; j <2; ++j) {
+//if (
+//cameraPos.x > mesh[z][y+i][x+j].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.x < mesh[z][y+i][x+j].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y < mesh[z][y+i][x+j].position.y + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y > mesh[z][y+i][x+j].position.y - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z > mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z < mesh[z][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2
+//) {
+	if (cameraPos.z < mesh[z][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+        cameraPos.z > mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2) {
+		cameraPos.z = mesh[z][y+i][x+j].position.z  + (CUBE_SIZE + PLAYER_SIZE) / 2;
+	}// else {
+      cameraPos.z -= lookAt.z * 0.002;   
+    //}
+//}
+}
+}
+}
+
+function z_back(x, y, z)
+{
+for (var i = -1; i <2; ++i) {
+for (var j = -1; j <2; ++j) {
+//if (
+//cameraPos.x > mesh[z+1][y+i][x+j].position.x - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.x < mesh[z+1][y+i][x+j].position.x + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y < mesh[z+1][y+i][x+j].position.y + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.y > mesh[z+1][y+i][x+j].position.y - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z > mesh[z+1][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+//cameraPos.z < mesh[z+1][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2
+//) {
+	if (cameraPos.z < mesh[z][y+i][x+j].position.z + (CUBE_SIZE + PLAYER_SIZE) / 2 &&
+        cameraPos.z > mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2) {
+		cameraPos.z = mesh[z][y+i][x+j].position.z - (CUBE_SIZE + PLAYER_SIZE) / 2;
+	}// else {
+      cameraPos.z -= lookAt.z * 0.002;   
+    //}
+//}
+}
+}
+}
+    
+    
     
 var main = function () {
   var scene = new THREE.Scene();
@@ -149,7 +244,7 @@ var main = function () {
   directionalLight.position.set( 0, 0.7, 0.7 );
   scene.add( directionalLight );
 
-  cameraPos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, 130);
+  cameraPos = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -CUBE_SIZE / 2);
   lookAt     = new THREE.Vector3(-CUBE_SIZE / 2, -CUBE_SIZE / 2, -CAMERA_PLAYER_DISTANCE);
   lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
   lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
@@ -179,8 +274,9 @@ var main = function () {
       }
     }
 
-  for (var z = 0; z < CUBE_NUM_Z; z++) {
-  for (var y = 0; y < CUBE_NUM_Y; y++) {
+                                        mesh        = new Array(CUBE_NUM);
+  for (var z = 0; z < CUBE_NUM_Z; z++) {mesh[z]     = new Array(CUBE_NUM);
+  for (var y = 0; y < CUBE_NUM_Y; y++) {mesh[z][y]  = new Array(CUBE_NUM);
   for (var x = 0; x < CUBE_NUM_X; x++) {
     var r = Math.floor( Math.random() * 11 );
     material_color[z][y][x] = 256 * 256 * (255 - x * 28) + 256 * (255 - y * 28) + (255 - z * 28);
@@ -219,13 +315,13 @@ var main = function () {
       
     var geometry = new THREE.CubeGeometry( CUBE_SIZE, CUBE_SIZE, CUBE_SIZE );
     var material = new THREE.MeshPhongMaterial( { color: material_color[z][y][x], transparent:true, blending:THREE.NormalBlending, opacity:0.1 } );
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.translateX(x * 12 - CUBE_NUM_X / 2 * 12);
-    mesh.translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
-    mesh.translateZ(z * 12 - CUBE_NUM_Z / 2 * 12);
+    mesh[z][y][x] = new THREE.Mesh( geometry, material );
+    mesh[z][y][x].translateX(x * 12 - CUBE_NUM_X / 2 * 12);
+    mesh[z][y][x].translateY(y * 12 - CUBE_NUM_Y / 2 * 12);
+    mesh[z][y][x].translateZ(z * 12 - CUBE_NUM_Z / 2 * 12);
     if ((x % 2 == 0 && y % 2 == 0 && z % 2 == 0) || r > 5) {
       scene.add(lines[index]);
-      scene.add(mesh);
+      scene.add(mesh[z][y][x]);
     }
   }
   }
@@ -348,42 +444,52 @@ var main = function () {
     
   ( function renderLoop () {
     requestAnimationFrame( renderLoop );
+    var x = Math.abs(~~(( ((cameraPos.x + CUBE_SIZE * CUBE_NUM / 2) / CUBE_SIZE))
+                      ));
+    var y = Math.abs(~~(( ((cameraPos.y + CUBE_SIZE * CUBE_NUM / 2) / CUBE_SIZE))
+                      ));
+    var z = Math.abs(~~(( ((cameraPos.z + CUBE_SIZE * CUBE_NUM / 2) / CUBE_SIZE))
+                      ));
+
     if (isGo) {
-      cameraPos.x -= lookAt.x * 0.008;
-      cameraPos.z -= lookAt.z * 0.008;
+        if (lookAt.x > 0) {            x_right(0,1,1);        }
+        if (lookAt.x < 0) {            x_left(8,1,1);        }
+        if (lookAt.z > 0) {            z_front(1,1,0);        }
+        if (lookAt.z < 0) {            z_back(1,1,8);        }
     }
     if (isRight) {
-        camera_angle += 0.2;
+        camera_angle += 0.4;
         lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
         lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
     }
     if (isLeft) {
-        camera_angle -= 0.2;
+        camera_angle -= 0.4;
         lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
         lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
     }
     if (keyArray[0] || doubleKeyUpLeft) {
-        keyArray[0] = false;
-        camera_angle -= 1;
-        if (!doubleKeyUpLeft) {
-          camera_angle -= 1;
+        camera_angle -= 0.4;
+        if (!doubleKeyUpLeft && !keyArray[0]) {
+          camera_angle -= 0.4;
         }
         lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
         lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
     }
     if (keyArray[2] || doubleKeyUpRight) {
-        keyArray[2] = false;
-        camera_angle += 1;
-        if (!doubleKeyUpRight) {
-          camera_angle += 1;
+        camera_angle += 0.4;
+        if (!doubleKeyUpRight && !keyArray[2]) {
+          camera_angle += 0.4;
         }
 
         lookAt.x = Math.cos(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
         lookAt.z = Math.sin(camera_angle * RADIAN) * CAMERA_PLAYER_DISTANCE;
     }
+
     if (keyArray[1] || doubleKeyUpLeft) {
-        cameraPos.x -= lookAt.x * 0.008;
-        cameraPos.z -= lookAt.z * 0.008;
+        if (lookAt.x > 0) {            x_right(0,1,1);        }
+        if (lookAt.x < 0) {            x_left(8,1,1);        }
+        if (lookAt.z > 0) {            z_front(1,1,0);        }
+        if (lookAt.z < 0) {            z_back(1,1,8);        }
     }
     if (keyArray[3] && keyDownPulse == false) {
         keyArray[3] = false;
@@ -405,8 +511,8 @@ var main = function () {
         putCube = true;
     }
       
-    if (keyArrayUp[0]) {        keyArrayUp[0] = false;   x_speed = 0; doubleKeyUpLeft = false;}
-    if (keyArrayUp[2]) {        keyArrayUp[2] = false;   x_speed = 0; doubleKeyUpRight = false;}
+    if (keyArrayUp[0]) { keyArray[0] = false; keyArrayUp[0] = false;   x_speed = 0; doubleKeyUpLeft = false;}
+    if (keyArrayUp[2]) { keyArray[2] = false; keyArrayUp[2] = false;   x_speed = 0; doubleKeyUpRight = false;}
     if (keyArrayUp[1]) {
         keyArrayUp[1] = false;
         z_speed = 0;
