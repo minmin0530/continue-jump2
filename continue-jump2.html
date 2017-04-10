@@ -61,7 +61,11 @@ var CUBE_NUM_Z = 9;
 var CUBE_SIZE  = 10;
 var PLAYER_SIZE = 10;
 var CAMERA_PLAYER_DISTANCE = CUBE_SIZE * 2;
-    
+var BACKGROUND_COLOR_DELAY_TIME = 200;
+var backgroundColor_changeFlag = false;
+var backgroundColor_delayTime  = 0;
+var backgroundColor            = 256*256*256-256*256 + 256*256-256 + 254;
+var backgroundColor_change     = 1;
 var GRAVITY         = 0.05;
 var JUMP_SPEED      = 1.53;
 var    X_SPEED      = 0.5;    
@@ -541,10 +545,25 @@ var main = function () {
                                   cameraPos.z + lookAt.z/8);
     }
 
+    if (backgroundColor <= 2 + 256 * 2 + 256*256 * 2 || backgroundColor >= 254 + 256*256-256 + 256*256*256-256*256) {
+      backgroundColor_change *= -1;
+      backgroundColor += (1 + 256 + 256*256) * backgroundColor_change;
+      backgroundColor_changeFlag = true;
+      backgroundColor_delayTime = 0;
+    }
+    if (backgroundColor_changeFlag) {
+      backgroundColor_delayTime += 1;
+    }
+    if (backgroundColor_delayTime > BACKGROUND_COLOR_DELAY_TIME) {
+      backgroundColor_changeFlag = false;    
+    }
+    if (backgroundColor_changeFlag == false) {
+      backgroundColor += (1 + 256 + 256*256) * backgroundColor_change;
+    }
+    renderer.setClearColorHex(backgroundColor, 1.0);
     renderer.render( scene, camera );
   } )();
 };
- 
 window.addEventListener( 'DOMContentLoaded', main, false );
 </script>
  
