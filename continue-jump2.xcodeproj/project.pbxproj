@@ -14,6 +14,15 @@
 		F4BDF7212BDC5BC400A95D25 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F4BDF7202BDC5BC400A95D25 /* Base */; };
 		F4BDF7232BDC5BC700A95D25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4BDF7222BDC5BC700A95D25 /* Assets.xcassets */; };
 		F4BDF7262BDC5BC700A95D25 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F4BDF7252BDC5BC700A95D25 /* Base */; };
+		F4BDF72D2BDC5D0100A95D25 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF72C2BDC5D0100A95D25 /* Cube.swift */; };
+		F4BDF72F2BDC5DAE00A95D25 /* BaseScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF72E2BDC5DAE00A95D25 /* BaseScene.swift */; };
+		F4BDF7312BDC5E0500A95D25 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF7302BDC5E0500A95D25 /* Scene.swift */; };
+		F4BDF7332BDC5E4100A95D25 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF7322BDC5E4100A95D25 /* OpeningScene.swift */; };
+		F4BDF7352BDC602800A95D25 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF7342BDC602800A95D25 /* Character.swift */; };
+		F4BDF7372BDC608100A95D25 /* Rotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF7362BDC608100A95D25 /* Rotation.swift */; };
+		F4BDF7392BDC60BA00A95D25 /* Original.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF7382BDC60BA00A95D25 /* Original.swift */; };
+		F4BDF73B2BDC60D900A95D25 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF73A2BDC60D900A95D25 /* Position.swift */; };
+		F4BDF73D2BDC621A00A95D25 /* StageStart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF73C2BDC621A00A95D25 /* StageStart.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +35,15 @@
 		F4BDF7202BDC5BC400A95D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F4BDF7222BDC5BC700A95D25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F4BDF7252BDC5BC700A95D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F4BDF72C2BDC5D0100A95D25 /* Cube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
+		F4BDF72E2BDC5DAE00A95D25 /* BaseScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseScene.swift; sourceTree = "<group>"; };
+		F4BDF7302BDC5E0500A95D25 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		F4BDF7322BDC5E4100A95D25 /* OpeningScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningScene.swift; sourceTree = "<group>"; };
+		F4BDF7342BDC602800A95D25 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		F4BDF7362BDC608100A95D25 /* Rotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rotation.swift; sourceTree = "<group>"; };
+		F4BDF7382BDC60BA00A95D25 /* Original.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Original.swift; sourceTree = "<group>"; };
+		F4BDF73A2BDC60D900A95D25 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		F4BDF73C2BDC621A00A95D25 /* StageStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageStart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +84,15 @@
 				F4BDF71F2BDC5BC400A95D25 /* Main.storyboard */,
 				F4BDF7222BDC5BC700A95D25 /* Assets.xcassets */,
 				F4BDF7242BDC5BC700A95D25 /* LaunchScreen.storyboard */,
+				F4BDF72C2BDC5D0100A95D25 /* Cube.swift */,
+				F4BDF72E2BDC5DAE00A95D25 /* BaseScene.swift */,
+				F4BDF7302BDC5E0500A95D25 /* Scene.swift */,
+				F4BDF7322BDC5E4100A95D25 /* OpeningScene.swift */,
+				F4BDF7342BDC602800A95D25 /* Character.swift */,
+				F4BDF7362BDC608100A95D25 /* Rotation.swift */,
+				F4BDF7382BDC60BA00A95D25 /* Original.swift */,
+				F4BDF73A2BDC60D900A95D25 /* Position.swift */,
+				F4BDF73C2BDC621A00A95D25 /* StageStart.swift */,
 			);
 			path = "continue-jump2";
 			sourceTree = "<group>";
@@ -141,8 +168,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4BDF7352BDC602800A95D25 /* Character.swift in Sources */,
 				F4BDF71E2BDC5BC400A95D25 /* Shaders.metal in Sources */,
+				F4BDF73B2BDC60D900A95D25 /* Position.swift in Sources */,
+				F4BDF72F2BDC5DAE00A95D25 /* BaseScene.swift in Sources */,
+				F4BDF72D2BDC5D0100A95D25 /* Cube.swift in Sources */,
+				F4BDF7332BDC5E4100A95D25 /* OpeningScene.swift in Sources */,
+				F4BDF73D2BDC621A00A95D25 /* StageStart.swift in Sources */,
+				F4BDF7372BDC608100A95D25 /* Rotation.swift in Sources */,
+				F4BDF7392BDC60BA00A95D25 /* Original.swift in Sources */,
 				F4BDF71A2BDC5BC400A95D25 /* Renderer.swift in Sources */,
+				F4BDF7312BDC5E0500A95D25 /* Scene.swift in Sources */,
 				F4BDF71C2BDC5BC400A95D25 /* GameViewController.swift in Sources */,
 				F4BDF7172BDC5BC400A95D25 /* AppDelegate.swift in Sources */,
 			);
