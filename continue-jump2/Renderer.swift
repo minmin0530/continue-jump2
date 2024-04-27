@@ -149,8 +149,26 @@ class Renderer: NSObject, MTKViewDelegate {
         rotation += 0.01
     }
     
+    func removeSubViews(mtkView: MTKView) {
+        let subviews = mtkView.subviews
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+    }
     func draw(in view: MTKView) {
         scene?.draw(in: view, pipelineState: pipelineState, depthStencilState: depthState)
+        
+        if scene?.changeScene == Scene.stage1_1 {
+            removeSubViews(mtkView: view)
+            scene = Stage1_1Scene(metalKitView: scene!.mtkView!)
+            scene?.setSize(size: view.drawableSize)
+            scene?.changeScene = Scene.none
+        } else if scene?.changeScene == Scene.stage1_2 {
+            removeSubViews(mtkView: view)
+            scene = Stage1_2Scene(metalKitView: scene!.mtkView!)
+            scene?.setSize(size: view.drawableSize)
+            scene?.changeScene = Scene.none
+        }
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

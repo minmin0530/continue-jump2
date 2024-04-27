@@ -1,5 +1,5 @@
 //
-//  OpeningScene.swift
+//  Stage1_2Scene.swift
 //  continue-jump2
 //
 //  Created by 泉芳樹 on 2024/04/27.
@@ -7,22 +7,7 @@
 
 import MetalKit
 
-let farZ:Float = 1000.0
-let fov:Float = 60.0
-let EYE_X_DEFAULT: Float =  8.0
-let EYE_Y_DEFAULT: Float =  9.0
-let EYE_Z_DEFAULT: Float =  5.0
-var EYE_X: Float =  8.0
-var EYE_Y: Float =  9.0
-var EYE_Z: Float =  5.0
-let TARGET_X: Float = 8.0
-let TARGET_Y: Float = 4.0
-let TARGET_Z: Float = 0.0
-let GOAL_X: Float = 30.0
-let LIGHT_COLOR_MAX : Float = 0.003
-let LIGHT_POSITION_MAX : Float = 5000
-
-class OpeningScene : BaseScene {
+class Stage1_2Scene : BaseScene {
     var character = Character()
     var characterPosition = SIMD3<Float>(5.0,0.0,-8.0)
     var stage = StageStart()
@@ -161,10 +146,10 @@ class OpeningScene : BaseScene {
     var goalCount: Int = 0
     var labelGoal: UILabel = UILabel(frame: CGRect(x: 50, y: 50, width: 600, height: 200))
     
-//    var buttonJumpY:  UIButton = UIButton(frame: CGRect(x:   0, y: 600, width: 70, height: 30))
-    var buttonJumpZ:  UIButton = UIButton(frame: CGRect(x:   0, y: 700, width: 120, height: 60))
-    //    var buttonLeft :  UIButton = UIButton(frame: CGRect(x:   0, y: 650, width: 70, height: 30))
-    //    var buttonRight:  UIButton = UIButton(frame: CGRect(x: 100, y: 650, width: 70, height: 30))
+    var buttonJumpY:  UIButton = UIButton(frame: CGRect(x:   0, y: 600, width: 100, height: 60))
+    var buttonJumpZ:  UIButton = UIButton(frame: CGRect(x:   0, y: 700, width: 100, height: 60))
+    var buttonLeft :  UIButton = UIButton(frame: CGRect(x:  20, y: 650, width: 100, height: 60))
+    var buttonRight:  UIButton = UIButton(frame: CGRect(x: 120, y: 650, width: 100, height: 60))
     
     var leftButtonFlag: Bool = false
     var rightButtonFlag: Bool = false
@@ -187,52 +172,46 @@ class OpeningScene : BaseScene {
         
         
         
-        //        let longPressLeft = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressLeft(gesture:)))
-        //        longPressLeft.minimumPressDuration = 0.01
-        //        buttonLeft.addGestureRecognizer(longPressLeft)
-        //        buttonLeft.setTitle("Left", for: UIControl.State.normal)
-        //        buttonLeft.setTitleColor(UIColor.red, for: UIControl.State.normal)
-        //        buttonLeft.backgroundColor = UIColor.white
-        //        buttonLeft.layer.borderWidth = 2.0
-        //        buttonLeft.layer.borderColor = UIColor.red.cgColor
-        //        buttonLeft.layer.cornerRadius = 5.0
-        //        metalKitView.addSubview(buttonLeft)
-        //
-        //
-        //        let longPressRight = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressRight(gesture:)))
-        //        longPressRight.minimumPressDuration = 0.01
-        //        buttonRight.addGestureRecognizer(longPressRight)
-        //        buttonRight.setTitle("Right", for: UIControl.State.normal)
-        //        buttonRight.setTitleColor(UIColor.red, for: UIControl.State.normal)
-        //        buttonRight.backgroundColor = UIColor.white
-        //        buttonRight.layer.borderWidth = 2.0
-        //        buttonRight.layer.borderColor = UIColor.red.cgColor
-        //        buttonRight.layer.cornerRadius = 5.0
-        //        metalKitView.addSubview(buttonRight)
+        let longPressLeft = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressLeft(gesture:)))
+        longPressLeft.minimumPressDuration = 0.01
+        buttonLeft.addGestureRecognizer(longPressLeft)
+        buttonLeft.setTitle("Left", for: UIControl.State.normal)
+        buttonLeft.setTitleColor(UIColor.red, for: UIControl.State.normal)
+        buttonLeft.backgroundColor = UIColor.white
+        buttonLeft.layer.borderWidth = 2.0
+        buttonLeft.layer.borderColor = UIColor.red.cgColor
+        buttonLeft.layer.cornerRadius = 5.0
+        metalKitView.addSubview(buttonLeft)
+
+
+        let longPressRight = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressRight(gesture:)))
+        longPressRight.minimumPressDuration = 0.01
+        buttonRight.addGestureRecognizer(longPressRight)
+        buttonRight.setTitle("Right", for: UIControl.State.normal)
+        buttonRight.setTitleColor(UIColor.red, for: UIControl.State.normal)
+        buttonRight.backgroundColor = UIColor.white
+        buttonRight.layer.borderWidth = 2.0
+        buttonRight.layer.borderColor = UIColor.red.cgColor
+        buttonRight.layer.cornerRadius = 5.0
+        metalKitView.addSubview(buttonRight)
         
         
-//        buttonJumpY.addTarget(self, action: #selector(jumpYButton), for: .touchDown)
-//        buttonJumpY.setTitle("jump", for: UIControl.State.normal)
-//        buttonJumpY.setTitleColor(UIColor.red, for: UIControl.State.normal)
-//        buttonJumpY.backgroundColor = UIColor.white
-//        buttonJumpY.layer.borderWidth = 2.0
-//        buttonJumpY.layer.borderColor = UIColor.red.cgColor
-//        buttonJumpY.layer.cornerRadius = 5.0
-//        mtkView?.addSubview(buttonJumpY)
+        buttonJumpY.addTarget(self, action: #selector(jumpYButton), for: .touchDown)
+        buttonJumpY.setTitle("jump Y", for: UIControl.State.normal)
+        buttonJumpY.setTitleColor(UIColor.red, for: UIControl.State.normal)
+        buttonJumpY.backgroundColor = UIColor.white
+        buttonJumpY.layer.borderWidth = 2.0
+        buttonJumpY.layer.borderColor = UIColor.red.cgColor
+        buttonJumpY.layer.cornerRadius = 5.0
+        mtkView?.addSubview(buttonJumpY)
         buttonJumpZ.addTarget(self, action: #selector(jumpZButton), for: .touchDown)
-        buttonJumpZ.setTitle("start", for: UIControl.State.normal)
+        buttonJumpZ.setTitle("jump Z", for: UIControl.State.normal)
         buttonJumpZ.setTitleColor(UIColor.red, for: UIControl.State.normal)
         buttonJumpZ.backgroundColor = UIColor.white
         buttonJumpZ.layer.borderWidth = 2.0
         buttonJumpZ.layer.borderColor = UIColor.red.cgColor
         buttonJumpZ.layer.cornerRadius = 5.0
         mtkView?.addSubview(buttonJumpZ)
-        
-        labelGoal.text = "continue-jump2"
-        labelGoal.textColor = UIColor.white
-        labelGoal.font = UIFont.boldSystemFont(ofSize: 32.0)
-        mtkView?.addSubview(labelGoal)
-        
     }
     
     @objc func longPressLeft(gesture: UILongPressGestureRecognizer) {
@@ -259,8 +238,6 @@ class OpeningScene : BaseScene {
     }
     @objc func jumpZButton(sender: UIButton){
         if character.jumpFlagZ {
-            changeScene = Scene.stage1_1
-
             character.jumpSpeedZ = 0.3
             character.jumpFlagZ = false
         }
@@ -468,9 +445,10 @@ class OpeningScene : BaseScene {
     
     override func setSize(size: CGSize) {
         windowSize = size
-//        buttonJumpY.frame.origin.x = size.width / 3 - 70.0
+        buttonJumpY.frame.origin.x = size.width / 4 - 70.0
         buttonJumpZ.frame.origin.x = size.width / 4 - 70.0
     }
     
     
 }
+

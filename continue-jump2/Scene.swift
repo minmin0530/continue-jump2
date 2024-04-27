@@ -8,12 +8,21 @@
 enum Scene {
     case none
     case opening
-    case stage1
-    case stage2
-    case stage3
-    case stage4
-    case stage5
-    case stage6
-    case stage7
+    case stage1_1
+    case stage1_2
+    case stage1_3
+    case stage1_4
+    case stage2_1
+    case stage2_2
+    case stage2_3
+    case stage2_4
+    case stage3_1
+    case stage3_2
+    case stage3_3
+    case stage3_4
+    case stage4_1
+    case stage4_2
+    case stage4_3
+    case stage4_4
     case ending
 }
