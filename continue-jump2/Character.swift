@@ -163,9 +163,7 @@ class Character {
     func setVoxel(data: Data?) {
         do {
             let strData: String = String(data: data!, encoding: .utf8)!
-            let replacedData = strData.replacingOccurrences(of: "(", with: "[")
-            let replacedData2 = replacedData.replacingOccurrences(of: ")", with: "]")
-            let voxel = try JSONSerialization.jsonObject(with: replacedData2.data(using: String.Encoding.utf8)!) as! Dictionary<String, Any>
+            let voxel = try JSONSerialization.jsonObject(with: strData.data(using: String.Encoding.utf8)!) as! Dictionary<String, Any>
             let roomData = voxel["room"]! as! Dictionary<String, Any>
             let voxelData = roomData["voxel"]! as! [Dictionary<String, Float>]
             for v in voxelData {
