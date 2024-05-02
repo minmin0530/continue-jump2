@@ -13,7 +13,7 @@ class Character {
     var jumpSpeed: Float = 0.0
     var jumpSpeedZ: Float = 0.0
     var gravity: Float = 0.015
-    var spinData: [Rotation] = [
+/*    var spinData: [Rotation] = [
         // head
         Rotation(axis: [ 0.0, 1.0, 0.0], angle: 0.0, speed: 0.01),
         Rotation(axis: [ 0.0, 1.0, 0.0], angle: 0.0, speed: 0.01),
@@ -149,6 +149,10 @@ class Character {
         Cube(r:0.0,g:0.0,b:0.0,a:1.0,sx:1.5/3.0,sy:1.5/3.0,sz:1.5/3.0),
         
         ]
+ */
+    var originalDataVoxel: [[Original]] = []
+    var translateDataVoxel: [Position] = []
+    var cubeDataVoxel: [Cube] = []
     
     var vertexBuffer :[MTLBuffer]?
     var originalBuffer: [MTLBuffer]?
@@ -156,48 +160,68 @@ class Character {
     var dynamicUniformBufferArray: [MTLBuffer]?
     var uniformsArray: [UnsafeMutablePointer<Uniforms>]?
     
+    func setVoxel(data: Data?) {
+        do {
+            let strData: String = String(data: data!, encoding: .utf8)!
+            let replacedData = strData.replacingOccurrences(of: "(", with: "[")
+            let replacedData2 = replacedData.replacingOccurrences(of: ")", with: "]")
+            let voxel = try JSONSerialization.jsonObject(with: replacedData2.data(using: String.Encoding.utf8)!) as! Dictionary<String, Any>
+            let roomData = voxel["room"]! as! Dictionary<String, Any>
+            let voxelData = roomData["voxel"]! as! [Dictionary<String, Float>]
+            for v in voxelData {
+                if v["m"] == 6.0 {
+                    cubeDataVoxel.append(Cube(r: 1.0, g: 1.0, b: 1.0, a: 1.0, sx: 0.13, sy: 0.13, sz: 0.13))
+                } else {
+                    cubeDataVoxel.append(Cube(r: 0.0, g: 0.0, b: 0.0, a: 1.0, sx: 0.13, sy: 0.13, sz: 0.13))
+                }
+                translateDataVoxel.append(Position(x: v["z"]! / 4, y: v["y"]! / 4, z: v["x"]! / 4))
+                originalDataVoxel.append([Original(position: [v["z"]! / 4, v["y"]! / 4, v["x"]! / 4])])
+            }
+        } catch {
+            print("voxel parse error")
+        }
+    }
     func initUniform(device: MTLDevice, uniformBufferSize: Int) {
         dynamicUniformBufferArray = []
         uniformsArray = []
-        for i in 0..<originalData.count {
+        for i in 0..<originalDataVoxel.count {
             dynamicUniformBufferArray?.append((device.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!))
             dynamicUniformBufferArray![i].label = "UniformBufferCharacter"
             uniformsArray?.append(UnsafeMutableRawPointer(dynamicUniformBufferArray![i].contents()).bindMemory(to:Uniforms.self, capacity:1) )
         }
-        
     }
     
     func update(device: MTLDevice, projectionMatrix: matrix_float4x4, viewMatrix: matrix_float4x4, light: SIMD3<Float>, lightColor: SIMD3<Float>, uniformBufferIndex: Int, uniformBufferOffset: Int, position: SIMD3<Float>) {
         
-        for i in 0..<originalData.count {
+        for i in 0..<originalDataVoxel.count {
             uniformsArray![i] = UnsafeMutableRawPointer(dynamicUniformBufferArray![i].contents() + uniformBufferOffset).bindMemory(to:Uniforms.self, capacity:1)
             uniformsArray![i][0].projectionMatrix = projectionMatrix
             
             
-            let spinMatrix = matrix4x4_rotation(radians: spinData[i].angle, axis: spinData[i].axis)
-            let translateMatrix = matrix4x4_translation(translateData[i].x,translateData[i].y,translateData[i].z)
+//            let spinMatrix = matrix4x4_rotation(radians: spinData[i].angle, axis: spinData[i].axis)
+            let translateMatrix = matrix4x4_translation(translateDataVoxel[i].x,translateDataVoxel[i].y,translateDataVoxel[i].z)
             //            uniformsArray![i][0].modelViewMatrix = simd_mul(viewMatrix, spinMatrix)
             uniformsArray![i][0].modelViewMatrix = simd_mul(viewMatrix, translateMatrix)
-            uniformsArray![i][0].modelViewMatrix = simd_mul(uniformsArray![i][0].modelViewMatrix, spinMatrix)
+//            uniformsArray![i][0].modelViewMatrix = simd_mul(uniformsArray![i][0].modelViewMatrix, spinMatrix)
             
             uniformsArray![i][0].lightPosition = light
             uniformsArray![i][0].lightColor = lightColor
 
             
-            spinData[i].angle += spinData[i].speed
+//            spinData[i].angle += spinData[i].speed
             
-            translateData[i].x = position.x
-            translateData[i].y = position.y
-            translateData[i].z = position.z
+            translateDataVoxel[i].x = position.x
+            translateDataVoxel[i].y = position.y
+            translateDataVoxel[i].z = position.z
         }
         
         vertexBuffer = []
-        for i in 0..<cubeData.count {
-            vertexBuffer?.append(device.makeBuffer(bytes: cubeData[i].vertexData, length: 82 * cubeData[i].vertexData.count, options:[])!)
+        for i in 0..<cubeDataVoxel.count {
+            vertexBuffer?.append(device.makeBuffer(bytes: cubeDataVoxel[i].vertexData, length: 82 * cubeDataVoxel[i].vertexData.count, options:[])!)
         }
         
         originalBuffer = []
-        for data in originalData {
+        for data in originalDataVoxel {
             originalBuffer?.append( device.makeBuffer(bytes: data, length: 16, options:[])! )
         }
         

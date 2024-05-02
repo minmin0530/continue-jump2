@@ -37,9 +37,18 @@ class GameViewController: UIViewController {
         }
 
         renderer = newRenderer
-
+        
         renderer.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
 
         mtkView.delegate = renderer
+        
+        VoxelSingleton.sendServerRequest(
+            urlString: "https://voxelart.jp/getroom",
+            params: [
+                "roomhost": "izumiyoshiki",
+                "roomname": "contineu-jump2-player"
+            ],
+            completion: renderer.voxel(data:))
+
     }
 }

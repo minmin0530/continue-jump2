@@ -173,17 +173,6 @@ class OpeningScene : BaseScene {
         super.init(metalKitView: metalKitView)
         self.mtkView = metalKitView
         
-        let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
-        character.initUniform(device: metalKitView.device!, uniformBufferSize: uniformBufferSize)
-        stage.initUniform(device: metalKitView.device!, uniformBufferSize: uniformBufferSize)
-        
-        dynamicUniformBufferArrayHurdle = []
-        uniformsArrayHurdle = []
-        for i in 0..<hurdleData.count {
-            dynamicUniformBufferArrayHurdle?.append((metalKitView.device?.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!)!)
-            dynamicUniformBufferArrayHurdle![i].label = "UniformBufferHurdle"
-            uniformsArrayHurdle?.append(UnsafeMutableRawPointer(dynamicUniformBufferArrayHurdle![i].contents()).bindMemory(to:Uniforms.self, capacity:1) )
-        }
         
         
         
@@ -219,6 +208,23 @@ class OpeningScene : BaseScene {
 //        buttonJumpY.layer.borderColor = UIColor.red.cgColor
 //        buttonJumpY.layer.cornerRadius = 5.0
 //        mtkView?.addSubview(buttonJumpY)
+        
+    }
+    override func setVoxel(data: Data?) {
+        character.setVoxel(data: data)
+        let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
+        character.initUniform(device: mtkView!.device!, uniformBufferSize: uniformBufferSize)
+        stage.initUniform(device: mtkView!.device!, uniformBufferSize: uniformBufferSize)
+        
+        dynamicUniformBufferArrayHurdle = []
+        uniformsArrayHurdle = []
+        for i in 0..<hurdleData.count {
+            dynamicUniformBufferArrayHurdle?.append((mtkView!.device?.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!)!)
+            dynamicUniformBufferArrayHurdle![i].label = "UniformBufferHurdle"
+            uniformsArrayHurdle?.append(UnsafeMutableRawPointer(dynamicUniformBufferArrayHurdle![i].contents()).bindMemory(to:Uniforms.self, capacity:1) )
+        }
+
+        
         buttonJumpZ.addTarget(self, action: #selector(jumpZButton), for: .touchDown)
         buttonJumpZ.setTitle("start", for: UIControl.State.normal)
         buttonJumpZ.setTitleColor(UIColor.red, for: UIControl.State.normal)
@@ -232,9 +238,8 @@ class OpeningScene : BaseScene {
         labelGoal.textColor = UIColor.white
         labelGoal.font = UIFont.boldSystemFont(ofSize: 32.0)
         mtkView?.addSubview(labelGoal)
-        
+
     }
-    
     @objc func longPressLeft(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
             leftButtonFlag = true

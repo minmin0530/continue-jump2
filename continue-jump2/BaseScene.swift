@@ -13,7 +13,8 @@ class BaseScene {
     var windowSize: CGSize?
     init(metalKitView: MTKView) {
     }
-    
+    func setVoxel(data: Data?) {
+    }
     func draw(in view: MTKView, pipelineState: MTLRenderPipelineState, depthStencilState: MTLDepthStencilState) {
     }
     

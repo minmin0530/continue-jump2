@@ -22,6 +22,7 @@ enum RendererError: Error {
 
 class Renderer: NSObject, MTKViewDelegate {
     var scene: BaseScene?
+    var voxelData: Data?
     var mtkView: MTKView?
 
     public let device: MTLDevice
@@ -78,13 +79,19 @@ class Renderer: NSObject, MTKViewDelegate {
         depthState = state
                 
         mtkView = metalKitView
-        scene = OpeningScene(metalKitView: metalKitView)
-        scene?.setSize(size: mtkView!.drawableSize)
+
 
         super.init()
         
     }
-    
+    func voxel(data: Data?) {
+        scene = OpeningScene(metalKitView: mtkView!)
+        scene?.setSize(size: mtkView!.drawableSize)        
+        voxelData = data
+        DispatchQueue.main.async {
+            self.scene?.setVoxel(data: data)
+        }
+    }
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
         // Create a Metal vertex descriptor specifying how vertices will by laid out for input into our render
         //   pipeline and how we'll layout our Model IO vertices
@@ -162,11 +169,13 @@ class Renderer: NSObject, MTKViewDelegate {
             removeSubViews(mtkView: view)
             scene = Stage1_1Scene(metalKitView: scene!.mtkView!)
             scene?.setSize(size: view.drawableSize)
+            scene?.setVoxel(data: voxelData)
             scene?.changeScene = Scene.none
         } else if scene?.changeScene == Scene.stage1_2 {
             removeSubViews(mtkView: view)
             scene = Stage1_2Scene(metalKitView: scene!.mtkView!)
             scene?.setSize(size: view.drawableSize)
+            scene?.setVoxel(data: voxelData)
             scene?.changeScene = Scene.none
         }
     }

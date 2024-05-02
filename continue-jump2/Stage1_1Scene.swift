@@ -158,14 +158,17 @@ class Stage1_1Scene : BaseScene {
         super.init(metalKitView: metalKitView)
         self.mtkView = metalKitView
         
+    }
+    override func setVoxel(data: Data?) {
+        character.setVoxel(data: data)
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
-        character.initUniform(device: metalKitView.device!, uniformBufferSize: uniformBufferSize)
-        stage.initUniform(device: metalKitView.device!, uniformBufferSize: uniformBufferSize)
+        character.initUniform(device: mtkView!.device!, uniformBufferSize: uniformBufferSize)
+        stage.initUniform(device: mtkView!.device!, uniformBufferSize: uniformBufferSize)
         
         dynamicUniformBufferArrayHurdle = []
         uniformsArrayHurdle = []
         for i in 0..<hurdleData.count {
-            dynamicUniformBufferArrayHurdle?.append((metalKitView.device?.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!)!)
+            dynamicUniformBufferArrayHurdle?.append((mtkView!.device?.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!)!)
             dynamicUniformBufferArrayHurdle![i].label = "UniformBufferHurdle"
             uniformsArrayHurdle?.append(UnsafeMutableRawPointer(dynamicUniformBufferArrayHurdle![i].contents()).bindMemory(to:Uniforms.self, capacity:1) )
         }
@@ -181,7 +184,7 @@ class Stage1_1Scene : BaseScene {
         buttonLeft.layer.borderWidth = 2.0
         buttonLeft.layer.borderColor = UIColor.red.cgColor
         buttonLeft.layer.cornerRadius = 5.0
-        metalKitView.addSubview(buttonLeft)
+        mtkView!.addSubview(buttonLeft)
 
 
         let longPressRight = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressRight(gesture:)))
@@ -193,7 +196,7 @@ class Stage1_1Scene : BaseScene {
         buttonRight.layer.borderWidth = 2.0
         buttonRight.layer.borderColor = UIColor.red.cgColor
         buttonRight.layer.cornerRadius = 5.0
-        metalKitView.addSubview(buttonRight)
+        mtkView!.addSubview(buttonRight)
         
         
         buttonJumpY.addTarget(self, action: #selector(jumpYButton), for: .touchDown)
@@ -219,7 +222,6 @@ class Stage1_1Scene : BaseScene {
         labelGoal.font = UIFont.boldSystemFont(ofSize: 80.0)
         mtkView?.addSubview(labelGoal)
     }
-    
     @objc func longPressLeft(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
             leftButtonFlag = true
