@@ -127,8 +127,17 @@ class Renderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.vertexDescriptor = mtlVertexDescriptor
         
         pipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        pipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        pipelineDescriptor.colorAttachments[0].rgbBlendOperation = MTLBlendOperation.add
+        pipelineDescriptor.colorAttachments[0].alphaBlendOperation = MTLBlendOperation.add
+        pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactor.sourceAlpha
+        pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactor.sourceAlpha
+        pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
+        pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
         pipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         pipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+ 
+        
         
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
