@@ -26,6 +26,7 @@
 		F4BDF73B2BDC60D900A95D25 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF73A2BDC60D900A95D25 /* Position.swift */; };
 		F4BDF73D2BDC621A00A95D25 /* StageStart.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BDF73C2BDC621A00A95D25 /* StageStart.swift */; };
 		F4C2F3912BE3847400454AA0 /* VoxelSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C2F3902BE3847400454AA0 /* VoxelSingleton.swift */; };
+		F4CA9C742C03426F00E21656 /* Stage1_BossScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CA9C732C03426F00E21656 /* Stage1_BossScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		F4BDF73A2BDC60D900A95D25 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		F4BDF73C2BDC621A00A95D25 /* StageStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageStart.swift; sourceTree = "<group>"; };
 		F4C2F3902BE3847400454AA0 /* VoxelSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoxelSingleton.swift; sourceTree = "<group>"; };
+		F4CA9C732C03426F00E21656 /* Stage1_BossScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stage1_BossScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				F4BDF73C2BDC621A00A95D25 /* StageStart.swift */,
 				F4979A6A2BDCAE1200F14935 /* Stage1_1Scene.swift */,
 				F4979A6C2BDCB43100F14935 /* Stage1_2Scene.swift */,
+				F4CA9C732C03426F00E21656 /* Stage1_BossScene.swift */,
 				F4C2F3902BE3847400454AA0 /* VoxelSingleton.swift */,
 			);
 			path = "continue-jump2";
@@ -180,6 +183,7 @@
 				F4C2F3912BE3847400454AA0 /* VoxelSingleton.swift in Sources */,
 				F4BDF7352BDC602800A95D25 /* Character.swift in Sources */,
 				F4979A6B2BDCAE1200F14935 /* Stage1_1Scene.swift in Sources */,
+				F4CA9C742C03426F00E21656 /* Stage1_BossScene.swift in Sources */,
 				F4979A6D2BDCB43100F14935 /* Stage1_2Scene.swift in Sources */,
 				F4BDF71E2BDC5BC400A95D25 /* Shaders.metal in Sources */,
 				F4BDF73B2BDC60D900A95D25 /* Position.swift in Sources */,

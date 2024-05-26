@@ -25,6 +25,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var voxelData: Data?
     var enemy1Data: Data?
     var enemy2Data: Data?
+    var miboss1Data: Data?
     var voxelOnce: Bool = true
     var mtkView: MTKView?
 
@@ -100,6 +101,9 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     func voxelEnemy2(data: Data?) {
         enemy2Data = data
+    }
+    func voxelMiboss1(data: Data?) {
+        miboss1Data = data
     }
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
         // Create a Metal vertex descriptor specifying how vertices will by laid out for input into our render
@@ -203,6 +207,16 @@ class Renderer: NSObject, MTKViewDelegate {
                 ],
                 completion: voxelEnemy2(data:))
         }
+        if scene?.changeScene == Scene.stage1_Boss && miboss1Data == nil && voxelOnce {
+            voxelOnce = false
+            VoxelSingleton.sendServerRequest(
+                urlString: "https://voxelart.jp/getroom",
+                params: [
+                    "roomhost": "izumiyoshiki",
+                    "roomname": "continue-jump2-miboss"
+                ],
+                completion: voxelMiboss1(data:))
+        }
 
         
         
@@ -219,6 +233,13 @@ class Renderer: NSObject, MTKViewDelegate {
             scene = Stage1_2Scene(metalKitView: scene!.mtkView!)
             scene?.setSize(size: view.drawableSize)
             scene?.setVoxel(data: enemy2Data)
+            scene?.changeScene = Scene.none
+            voxelOnce = true
+        } else if scene?.changeScene == Scene.stage1_Boss && miboss1Data != nil {
+            removeSubViews(mtkView: view)
+            scene = Stage1_BossScene(metalKitView: scene!.mtkView!)
+            scene?.setSize(size: view.drawableSize)
+            scene?.setVoxel(data: miboss1Data)
             scene?.changeScene = Scene.none
             voxelOnce = true
         }

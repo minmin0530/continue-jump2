@@ -1,13 +1,13 @@
 //
-//  Stage1_2Scene.swift
+//  Stage1_BossScene.swift
 //  continue-jump2
 //
-//  Created by 泉芳樹 on 2024/04/27.
+//  Created by 泉芳樹 on 2024/05/26.
 //
 
 import MetalKit
 
-class Stage1_2Scene : BaseScene {
+class Stage1_BossScene : BaseScene {
     var character = Character()
     var characterPosition = SIMD3<Float>(5.0,0.0,-8.0)
     var stage = StageStart()
@@ -240,7 +240,6 @@ class Stage1_2Scene : BaseScene {
     }
     @objc func jumpZButton(sender: UIButton){
         if character.jumpFlagZ {
-            changeScene = Scene.stage1_Boss
             character.jumpSpeedZ = 0.3
             character.jumpFlagZ = false
         }
