@@ -246,6 +246,8 @@ class Stage1_1Scene : BaseScene {
     }
     @objc func jumpZButton(sender: UIButton){
         if character.jumpFlagZ {
+            changeScene = Scene.stage1_2
+
             character.jumpSpeedZ = 0.3
             character.jumpFlagZ = false
         }

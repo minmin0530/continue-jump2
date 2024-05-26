@@ -46,7 +46,7 @@ class GameViewController: UIViewController {
             urlString: "https://voxelart.jp/getroom",
             params: [
                 "roomhost": "izumiyoshiki",
-                "roomname": "continue-jump2-kamiyama"
+                "roomname": "contineu-jump2-player"
             ],
             completion: renderer.voxel(data:))
 

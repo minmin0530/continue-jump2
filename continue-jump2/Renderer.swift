@@ -23,6 +23,9 @@ enum RendererError: Error {
 class Renderer: NSObject, MTKViewDelegate {
     var scene: BaseScene?
     var voxelData: Data?
+    var enemy1Data: Data?
+    var enemy2Data: Data?
+    var voxelOnce: Bool = true
     var mtkView: MTKView?
 
     public let device: MTLDevice
@@ -86,11 +89,17 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     func voxel(data: Data?) {
         scene = OpeningScene(metalKitView: mtkView!)
-        scene?.setSize(size: mtkView!.drawableSize)        
+        scene?.setSize(size: mtkView!.drawableSize)
         voxelData = data
         DispatchQueue.main.async {
             self.scene?.setVoxel(data: data)
         }
+    }
+    func voxelEnemy1(data: Data?) {
+        enemy1Data = data
+    }
+    func voxelEnemy2(data: Data?) {
+        enemy2Data = data
     }
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
         // Create a Metal vertex descriptor specifying how vertices will by laid out for input into our render
@@ -174,18 +183,44 @@ class Renderer: NSObject, MTKViewDelegate {
     func draw(in view: MTKView) {
         scene?.draw(in: view, pipelineState: pipelineState, depthStencilState: depthState)
         
-        if scene?.changeScene == Scene.stage1_1 {
+        if scene?.changeScene == Scene.stage1_1 && enemy1Data == nil && voxelOnce {
+            voxelOnce = false
+            VoxelSingleton.sendServerRequest(
+                urlString: "https://voxelart.jp/getroom",
+                params: [
+                    "roomhost": "izumiyoshiki",
+                    "roomname": "continue-jump2-enemy1"
+                ],
+                completion: voxelEnemy1(data:))
+        }
+        if scene?.changeScene == Scene.stage1_2 && enemy2Data == nil && voxelOnce {
+            voxelOnce = false
+            VoxelSingleton.sendServerRequest(
+                urlString: "https://voxelart.jp/getroom",
+                params: [
+                    "roomhost": "izumiyoshiki",
+                    "roomname": "continue-jump2-enemy2"
+                ],
+                completion: voxelEnemy2(data:))
+        }
+
+        
+        
+        
+        if scene?.changeScene == Scene.stage1_1 && enemy1Data != nil {
             removeSubViews(mtkView: view)
             scene = Stage1_1Scene(metalKitView: scene!.mtkView!)
             scene?.setSize(size: view.drawableSize)
-            scene?.setVoxel(data: voxelData)
+            scene?.setVoxel(data: enemy1Data)
             scene?.changeScene = Scene.none
-        } else if scene?.changeScene == Scene.stage1_2 {
+            voxelOnce = true
+        } else if scene?.changeScene == Scene.stage1_2 && enemy2Data != nil {
             removeSubViews(mtkView: view)
             scene = Stage1_2Scene(metalKitView: scene!.mtkView!)
             scene?.setSize(size: view.drawableSize)
-            scene?.setVoxel(data: voxelData)
+            scene?.setVoxel(data: enemy2Data)
             scene?.changeScene = Scene.none
+            voxelOnce = true
         }
     }
     

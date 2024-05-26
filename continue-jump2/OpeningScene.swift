@@ -26,7 +26,7 @@ class OpeningScene : BaseScene {
     var character = Character()
     var characterPosition = SIMD3<Float>(5.0,0.0,-8.0)
     var stage = StageStart()
-    
+    var onceFlag = true
     var hurdleData:[Cube] = [
         Cube(r:1.0,g:0.0,b:0.0,a:1.0,sx:1.0,sy:1.0,sz:1.0),
         Cube(r:1.0,g:0.0,b:0.0,a:1.0,sx:1.0,sy:1.0,sz:1.0),
@@ -159,10 +159,11 @@ class OpeningScene : BaseScene {
     
     
     var goalCount: Int = 0
-    var labelGoal: UILabel = UILabel(frame: CGRect(x: 50, y: 50, width: 600, height: 200))
+    var labelGoal: UILabel?
+//    var labelGoal: UILabel = UILabel(frame: CGRect(x: 50, y: 50, width: 600, height: 200))
     
 //    var buttonJumpY:  UIButton = UIButton(frame: CGRect(x:   0, y: 600, width: 70, height: 30))
-    var buttonJumpZ:  UIButton = UIButton(frame: CGRect(x:   0, y: 700, width: 120, height: 60))
+    var buttonJumpZ:  UIButton?
     //    var buttonLeft :  UIButton = UIButton(frame: CGRect(x:   0, y: 650, width: 70, height: 30))
     //    var buttonRight:  UIButton = UIButton(frame: CGRect(x: 100, y: 650, width: 70, height: 30))
     
@@ -172,7 +173,7 @@ class OpeningScene : BaseScene {
     override init(metalKitView: MTKView) {
         super.init(metalKitView: metalKitView)
         self.mtkView = metalKitView
-        
+        self.changeScene = Scene.opening
         
         
         
@@ -225,19 +226,6 @@ class OpeningScene : BaseScene {
         }
 
         
-        buttonJumpZ.addTarget(self, action: #selector(jumpZButton), for: .touchDown)
-        buttonJumpZ.setTitle("start", for: UIControl.State.normal)
-        buttonJumpZ.setTitleColor(UIColor.red, for: UIControl.State.normal)
-        buttonJumpZ.backgroundColor = UIColor.white
-        buttonJumpZ.layer.borderWidth = 2.0
-        buttonJumpZ.layer.borderColor = UIColor.red.cgColor
-        buttonJumpZ.layer.cornerRadius = 5.0
-        mtkView?.addSubview(buttonJumpZ)
-        
-        labelGoal.text = "continue-jump2"
-        labelGoal.textColor = UIColor.white
-        labelGoal.font = UIFont.boldSystemFont(ofSize: 32.0)
-        mtkView?.addSubview(labelGoal)
 
     }
     @objc func longPressLeft(gesture: UILongPressGestureRecognizer) {
@@ -272,6 +260,25 @@ class OpeningScene : BaseScene {
     }
     
     override func draw(in view: MTKView, pipelineState: MTLRenderPipelineState, depthStencilState: MTLDepthStencilState) {
+        if onceFlag {
+            buttonJumpZ = UIButton(frame: CGRect(x:   0, y: 700, width: 120, height: 60))
+            buttonJumpZ!.addTarget(self, action: #selector(jumpZButton), for: .touchDown)
+            buttonJumpZ!.setTitle("start", for: UIControl.State.normal)
+            buttonJumpZ!.setTitleColor(UIColor.red, for: UIControl.State.normal)
+            buttonJumpZ!.backgroundColor = UIColor.white
+            buttonJumpZ!.layer.borderWidth = 2.0
+            buttonJumpZ!.layer.borderColor = UIColor.red.cgColor
+            buttonJumpZ!.layer.cornerRadius = 5.0
+            buttonJumpZ!.frame.origin.x = windowSize!.width / 4 - 70.0
+            mtkView?.addSubview(buttonJumpZ!)
+            
+            labelGoal = UILabel(frame: CGRect(x: 50, y: 50, width: 600, height: 200))
+            labelGoal!.text = "continue-jump2"
+            labelGoal!.textColor = UIColor.red
+            labelGoal!.font = UIFont.boldSystemFont(ofSize: 32.0)
+            mtkView?.addSubview(labelGoal!)
+            onceFlag = false
+        }
         if light.x > LIGHT_POSITION_MAX || light.x < -LIGHT_POSITION_MAX {
             lightSpeed *= -1
         }
@@ -340,7 +347,7 @@ class OpeningScene : BaseScene {
         }
         
         if characterPosition.x > GOAL_X + Float(STAGE_WIDTH) {
-            labelGoal.isHidden = false
+            labelGoal!.isHidden = false
             goalCount += 1
         }
 //        if (goalCount > 100) {
@@ -474,7 +481,7 @@ class OpeningScene : BaseScene {
     override func setSize(size: CGSize) {
         windowSize = size
 //        buttonJumpY.frame.origin.x = size.width / 3 - 70.0
-        buttonJumpZ.frame.origin.x = size.width / 4 - 70.0
+//        buttonJumpZ!.frame.origin.x = size.width / 4 - 70.0
     }
     
     
